@@ -1,0 +1,106 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import SectionHeader from "@/components/common/SectionHeader";
+import { PRODUCTS } from "@/lib/constants";
+
+export default function ProductsGrid() {
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+  };
+
+  return (
+    <section className="bg-brand-charcoal py-20 relative border-b border-brand-steel/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <SectionHeader
+          eyebrow="Precision Range"
+          heading="Our Featured Products"
+          subheading="Click to explore specifications, materials, and available size options"
+          theme="dark"
+        />
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          {PRODUCTS.map((product) => (
+            <motion.div
+              key={product.id}
+              variants={cardVariants}
+              whileHover={{ y: -8, boxShadow: "0 25px 50px -12px rgba(231, 111, 0, 0.15)" }}
+              className="bg-brand-navy border border-brand-steel/20 rounded-2xl overflow-hidden hover:border-brand-orange/60 transition-all duration-300 flex flex-col justify-between"
+            >
+              <Link href={product.slug} className="flex-grow flex flex-col">
+                {/* Top Section / Image Placeholder */}
+                <div className="h-48 bg-gradient-to-br from-brand-steel/10 to-brand-navy/90 relative flex items-center justify-center border-b border-brand-steel/10 group">
+                  <svg
+                    className="w-20 h-20 text-brand-steel/30 group-hover:text-brand-orange/50 transition-colors duration-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 bg-brand-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+
+                {/* Content Section */}
+                <div className="p-6 flex-grow flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold text-white group-hover:text-brand-orange transition-colors">
+                      {product.name}
+                    </h3>
+                    <p className="text-brand-steel text-sm mt-3 line-clamp-2 leading-relaxed">
+                      {product.shortDesc}
+                    </p>
+                  </div>
+
+                  <div className="mt-6 space-y-3">
+                    <div className="flex flex-wrap gap-2">
+                      <span className="inline-block bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-xs font-bold px-2.5 py-1 rounded">
+                        Sizes: {product.sizes}
+                      </span>
+                      <span className="inline-block bg-white/5 border border-white/10 text-brand-steel text-xs font-semibold px-2.5 py-1 rounded">
+                        {product.material.split(",")[0]}
+                      </span>
+                    </div>
+
+                    <span className="inline-flex items-center text-brand-orange font-bold text-sm hover:underline mt-2">
+                      View Details →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </motion.div>
+
+      </div>
+    </section>
+  );
+}

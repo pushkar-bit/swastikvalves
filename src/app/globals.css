@@ -1,0 +1,96 @@
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+  }
+  :root {
+    --background: oklch(0.985 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.16 0.04 250);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.61 0.20 50);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.61 0.20 50);
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: oklch(0.16 0.04 250);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.20 0.04 250);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.20 0.04 250);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.61 0.20 50);
+    --primary-foreground: oklch(0.16 0.04 250);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #8A9BB0; /* brand-steel */
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #0D1B2A; /* brand-navy */
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1A1A2E; /* brand-charcoal */
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: #0D1B2A; /* brand-navy */
+    color: #E76F00; /* brand-orange */
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: #F8F9FA; /* brand-offwhite */
+    color: #111827; /* text-primary */
+    @apply antialiased font-sans;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
