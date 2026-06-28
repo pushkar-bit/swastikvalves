@@ -9,6 +9,7 @@ import * as z from "zod";
 const rfqSchema = z.object({
   contactName: z.string().min(2),
   firmName: z.string().min(2),
+  gstNumber: z.string().regex(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/),
   location: z.string().min(10),
   phoneNumber: z.string().regex(/^\+?[1-9]\d{7,14}$/),
   email: z.string().email().refine(
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
       orderId,
       timestamp,
       firmName: validatedData.firmName,
+      gstNumber: validatedData.gstNumber,
       contactName: validatedData.contactName,
       email: validatedData.email,
       phoneNumber: validatedData.phoneNumber,

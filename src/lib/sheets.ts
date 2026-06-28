@@ -13,6 +13,7 @@ export interface RFQRecord {
   orderId: string;
   timestamp: string;
   firmName: string;
+  gstNumber: string;
   contactName: string;
   location: string;
   phoneNumber: string;
@@ -88,12 +89,13 @@ export async function appendRFQRow(record: RFQRecord): Promise<void> {
   try {
     const { sheets, spreadsheetId } = client;
     
-    // Matrix: A:Timestamp, B:OrderId, C:Firm, D:Contact, E:Location, F:Phone, G:Email, H:Details, I:Status, J:AdminToken, K:Expiry, L:AdvanceStatus
+    // Matrix: A:Timestamp, B:OrderId, C:Firm, D:GST, E:Contact, F:Location, G:Phone, H:Email, I:Details, J:Status, K:AdminToken, L:Expiry, M:AdvanceStatus
     const values = [
       [
         record.timestamp,
         record.orderId,
         record.firmName,
+        record.gstNumber,
         record.contactName,
         record.location,
         record.phoneNumber,
@@ -108,7 +110,7 @@ export async function appendRFQRow(record: RFQRecord): Promise<void> {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: "Sheet1!A:L",
+      range: "Sheet1!A:M",
       valueInputOption: "RAW",
       requestBody: { values },
     });
@@ -129,7 +131,7 @@ export async function getRFQRow(orderId: string): Promise<RFQRecord | null> {
     const { sheets, spreadsheetId } = client;
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: "Sheet1!A:L",
+      range: "Sheet1!A:M",
     });
 
     const rows = res.data.values || [];
@@ -139,7 +141,7 @@ export async function getRFQRow(orderId: string): Promise<RFQRecord | null> {
       if (colB === orderId) {
         let items: RFQItem[] = [];
         try {
-          items = JSON.parse(rows[i][7] || "[]");
+          items = JSON.parse(rows[i][8] || "[]");
         } catch {
           // ignore
         }
@@ -148,15 +150,16 @@ export async function getRFQRow(orderId: string): Promise<RFQRecord | null> {
           orderId,
           timestamp: rows[i][0] || "",
           firmName: rows[i][2] || "",
-          contactName: rows[i][3] || "",
-          location: rows[i][4] || "",
-          phoneNumber: rows[i][5] || "",
-          email: rows[i][6] || "",
+          gstNumber: rows[i][3] || "",
+          contactName: rows[i][4] || "",
+          location: rows[i][5] || "",
+          phoneNumber: rows[i][6] || "",
+          email: rows[i][7] || "",
           items,
-          status: (rows[i][8] || "PENDING") as OrderStatus,
-          adminToken: rows[i][9] || "",
-          expiryDate: rows[i][10] || "",
-          advancePaymentStatus: (rows[i][11] || "UNPAID") as AdvancePaymentStatus,
+          status: (rows[i][9] || "PENDING") as OrderStatus,
+          adminToken: rows[i][10] || "",
+          expiryDate: rows[i][11] || "",
+          advancePaymentStatus: (rows[i][12] || "UNPAID") as AdvancePaymentStatus,
         };
       }
     }
@@ -192,7 +195,7 @@ export async function updateRFQRowStatus(
     const { sheets, spreadsheetId } = client;
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: "Sheet1!A:L",
+      range: "Sheet1!A:M",
     });
 
     const rows = res.data.values || [];
@@ -212,14 +215,14 @@ export async function updateRFQRowStatus(
     }
 
     const currentStatus = status;
-    const currentAdminToken = updates?.adminToken !== undefined ? updates.adminToken : rows[rowIndex - 1][9] || "";
-    const currentExpiryDate = updates?.expiryDate !== undefined ? updates.expiryDate : rows[rowIndex - 1][10] || "";
+    const currentAdminToken = updates?.adminToken !== undefined ? updates.adminToken : rows[rowIndex - 1][10] || "";
+    const currentExpiryDate = updates?.expiryDate !== undefined ? updates.expiryDate : rows[rowIndex - 1][11] || "";
     const currentAdvanceStatus =
-      updates?.advancePaymentStatus !== undefined ? updates.advancePaymentStatus : rows[rowIndex - 1][11] || "UNPAID";
+      updates?.advancePaymentStatus !== undefined ? updates.advancePaymentStatus : rows[rowIndex - 1][12] || "UNPAID";
 
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `Sheet1!I${rowIndex}:L${rowIndex}`,
+      range: `Sheet1!J${rowIndex}:M${rowIndex}`,
       valueInputOption: "RAW",
       requestBody: {
         values: [[currentStatus, currentAdminToken, currentExpiryDate, currentAdvanceStatus]],

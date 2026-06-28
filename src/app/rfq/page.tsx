@@ -12,6 +12,7 @@ import { appConfig } from "@/config/appConfig";
 const rfqSchema = z.object({
   contactName: z.string().min(2, "Contact name is required"),
   firmName: z.string().min(2, "Firm name is required"),
+  gstNumber: z.string().regex(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/, "Enter a valid 15-character GST Number (e.g. 07AAAAA1111A1Z1)"),
   location: z.string().min(10, "Full shipping/freight address is required"),
   phoneNumber: z.string().regex(/^\+?[1-9]\d{7,14}$/, "Enter phone with country code (e.g. +919815652779)"),
   email: z.string().email("Invalid email address").refine(
@@ -172,6 +173,20 @@ export default function RFQPage() {
                 placeholder="Company Legal Name"
               />
               {errors.firmName && <p className="text-red-500 text-[10px] mt-1.5 font-bold">{errors.firmName.message}</p>}
+            </div>
+
+            {/* GST Number */}
+            <div>
+              <label className="text-xs font-bold text-brand-navy mb-2 block uppercase tracking-wider">GST Number *</label>
+              <input
+                type="text"
+                {...register("gstNumber")}
+                className={`border rounded-lg px-4 py-2.5 w-full text-xs font-medium focus:ring-1 focus:ring-brand-orange focus:border-brand-orange outline-none bg-white transition ${
+                  errors.gstNumber ? "border-red-500" : "border-gray-200"
+                }`}
+                placeholder="15-character GSTIN (e.g. 07AAAAA1111A1Z1)"
+              />
+              {errors.gstNumber && <p className="text-red-500 text-[10px] mt-1.5 font-bold">{errors.gstNumber.message}</p>}
             </div>
 
             {/* Corporate Email */}

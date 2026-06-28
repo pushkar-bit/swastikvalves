@@ -265,6 +265,10 @@ export default function CheckoutPage() {
                   <span className="text-sm font-extrabold">{record?.firmName}</span>
                 </div>
                 <div>
+                  <span className="text-brand-steel block uppercase tracking-wider text-[9px] mb-1">GST Number</span>
+                  <span className="text-sm font-mono font-extrabold text-brand-navy">{record?.gstNumber}</span>
+                </div>
+                <div>
                   <span className="text-brand-steel block uppercase tracking-wider text-[9px] mb-1">Contact Officer</span>
                   <span className="text-sm font-extrabold">{record?.contactName}</span>
                 </div>
