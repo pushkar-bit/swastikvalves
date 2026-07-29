@@ -1,9 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import SectionHeader from "@/components/common/SectionHeader";
 import { PRODUCTS } from "@/lib/constants";
+import { findFamily } from "@/lib/catalog";
 
 export default function ProductsGrid() {
   const containerVariants = {
@@ -46,26 +48,15 @@ export default function ProductsGrid() {
               className="bg-brand-navy border border-brand-steel/20 rounded-2xl overflow-hidden hover:border-brand-orange/60 transition-all duration-300 flex flex-col justify-between"
             >
               <Link href={product.slug} className="flex-grow flex flex-col">
-                {/* Top Section / Image Placeholder */}
-                <div className="h-48 bg-gradient-to-br from-brand-steel/10 to-brand-navy/90 relative flex items-center justify-center border-b border-brand-steel/10 group">
-                  <svg
-                    className="w-20 h-20 text-brand-steel/30 group-hover:text-brand-orange/50 transition-colors duration-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
+                {/* Top Section / Product Image */}
+                <div className="h-48 bg-white relative flex items-center justify-center border-b border-brand-steel/10 group p-4 overflow-hidden">
+                  <Image
+                    src={findFamily(product.id)?.image || ""}
+                    alt={findFamily(product.id)?.imageAlt || product.name}
+                    width={400}
+                    height={300}
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                  />
                   <div className="absolute inset-0 bg-brand-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 

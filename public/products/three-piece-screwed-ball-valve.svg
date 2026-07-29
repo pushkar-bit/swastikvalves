@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Screwed end three piece ball valve, technical elevation">
+  <defs>
+    <pattern id="gridtp" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#0D1B2A" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="steeltp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4F6F8"/>
+      <stop offset="0.35" stop-color="#D6DCE4"/>
+      <stop offset="0.62" stop-color="#AEB9C7"/>
+      <stop offset="1" stop-color="#8A9BB0"/>
+    </linearGradient>
+    <linearGradient id="bodytp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FAFBFC"/>
+      <stop offset="0.3" stop-color="#DEE4EB"/>
+      <stop offset="0.7" stop-color="#B4C0CE"/>
+      <stop offset="1" stop-color="#7C8DA3"/>
+    </linearGradient>
+    <linearGradient id="levertp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF9433"/>
+      <stop offset="0.5" stop-color="#E76F00"/>
+      <stop offset="1" stop-color="#B25300"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="#F8F9FA"/>
+  <rect width="800" height="600" fill="url(#gridtp)"/>
+
+  <path d="M60 340H740" stroke="#8A9BB0" stroke-width="1.2" stroke-dasharray="14 6 3 6" fill="none"/>
+
+  <g stroke="#0D1B2A" stroke-width="2.5" stroke-linejoin="round">
+    <!-- screwed end nipples with thread hatching -->
+    <rect x="104" y="306" width="112" height="68" rx="4" fill="url(#steeltp)"/>
+    <rect x="584" y="306" width="112" height="68" rx="4" fill="url(#steeltp)"/>
+
+    <!-- hex end caps -->
+    <path d="M216 282h74l16 14v88l-16 14h-74z" fill="url(#steeltp)"/>
+    <path d="M584 282h-74l-16 14v88l16 14h74z" fill="url(#steeltp)"/>
+
+    <!-- centre body -->
+    <rect x="304" y="266" width="192" height="148" rx="12" fill="url(#bodytp)"/>
+
+    <!-- gland / stem -->
+    <path d="M362 266v-24h76v24z" fill="url(#steeltp)"/>
+    <rect x="372" y="202" width="56" height="42" rx="6" fill="url(#steeltp)"/>
+    <rect x="388" y="158" width="24" height="46" rx="4" fill="url(#steeltp)"/>
+
+    <!-- lever -->
+    <path d="M334 130h240a12 12 0 0 1 12 12v20a12 12 0 0 1 -12 12H334a14 14 0 0 1 -14 -14v-16a14 14 0 0 1 14 -14z" fill="url(#levertp)" stroke="#8C4100"/>
+    <rect x="322" y="136" width="52" height="28" rx="8" fill="#0D1B2A" stroke="#0D1B2A"/>
+  </g>
+
+  <!-- thread hatching -->
+  <g stroke="#0D1B2A" stroke-width="1.4" opacity="0.55">
+    <path d="M112 306v68M126 306v68M140 306v68M154 306v68M168 306v68M182 306v68M196 306v68"/>
+    <path d="M604 306v68M618 306v68M632 306v68M646 306v68M660 306v68M674 306v68M688 306v68"/>
+  </g>
+
+  <!-- full bore ball -->
+  <g>
+    <circle cx="400" cy="340" r="50" fill="#E9EDF2" stroke="#0D1B2A" stroke-width="2.5"/>
+    <rect x="336" y="322" width="128" height="36" rx="6" fill="#F8F9FA" stroke="#0D1B2A" stroke-width="2.5"/>
+    <circle cx="400" cy="340" r="50" fill="none" stroke="#0D1B2A" stroke-width="2.5"/>
+    <path d="M400 290v-132" stroke="#0D1B2A" stroke-width="2.5"/>
+  </g>
+
+  <!-- tie rods -->
+  <g stroke="#0D1B2A" stroke-width="3">
+    <path d="M300 288h200M300 392h200"/>
+  </g>
+  <g fill="#0D1B2A">
+    <circle cx="300" cy="288" r="7"/><circle cx="500" cy="288" r="7"/>
+    <circle cx="300" cy="392" r="7"/><circle cx="500" cy="392" r="7"/>
+  </g>
+
+  <g stroke="#E76F00" stroke-width="1.5" fill="none">
+    <path d="M104 470h592"/>
+    <path d="M104 460v20M696 460v20"/>
+  </g>
+  <text x="400" y="500" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19" fill="#0D1B2A" letter-spacing="2">SCREWED END · FULL BORE</text>
+  <text x="400" y="530" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#8A9BB0" letter-spacing="3">CLASS 800 · 15–50 mm</text>
+</svg>

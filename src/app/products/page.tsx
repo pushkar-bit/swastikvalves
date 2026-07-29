@@ -1,7 +1,9 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { Wrench, Settings } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { PRODUCTS } from "@/lib/constants";
+import { findFamily } from "@/lib/catalog";
 import SectionHeader from "@/components/common/SectionHeader";
 
 export const metadata: Metadata = {
@@ -49,9 +51,15 @@ export default function ProductsPage() {
                 href={prod.slug}
                 className="group border border-gray-100 bg-white rounded-2xl overflow-hidden hover:border-brand-orange hover:shadow-2xl transition-all duration-300 flex flex-col h-[360px] cursor-pointer"
               >
-                {/* Top Half - Gradient Bg */}
-                <div className="h-44 bg-gradient-to-br from-brand-steel/10 to-brand-navy/90 relative flex items-center justify-center border-b border-gray-100 overflow-hidden">
-                  <Settings className="w-16 h-16 text-brand-steel/30 group-hover:text-brand-orange group-hover:rotate-45 transition-all duration-500" />
+                {/* Top Half - Product Image */}
+                <div className="h-44 bg-white relative flex items-center justify-center border-b border-gray-100 overflow-hidden p-4">
+                  <Image
+                    src={findFamily(prod.id)?.image || ""}
+                    alt={findFamily(prod.id)?.imageAlt || prod.name}
+                    width={400}
+                    height={300}
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                  />
                   <div className="absolute inset-0 bg-brand-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 

@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import BackToTop from "@/components/layout/BackToTop";
 import SchemaMarkup from "@/components/common/SchemaMarkup";
+import { CartProvider } from "@/lib/cart";
 import "./globals.css";
 
 const inter = Inter({
@@ -69,9 +70,11 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} scroll-smooth`}>
       <body className="bg-brand-offwhite text-text-primary antialiased font-sans flex flex-col min-h-screen">
         <SchemaMarkup />
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </CartProvider>
         <WhatsAppButton />
         <BackToTop />
         {process.env.NEXT_PUBLIC_GA_ID && (

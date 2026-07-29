@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Gun metal globe pattern valve with hand wheel, technical elevation">
+  <defs>
+    <pattern id="gridgv" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#0D1B2A" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="bronzegv" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F0D9B5"/>
+      <stop offset="0.3" stop-color="#D6AE7B"/>
+      <stop offset="0.65" stop-color="#B08249"/>
+      <stop offset="1" stop-color="#7E5A2E"/>
+    </linearGradient>
+    <linearGradient id="bronzegvDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C79A61"/>
+      <stop offset="1" stop-color="#6E4E28"/>
+    </linearGradient>
+    <linearGradient id="wheelgv" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF9433"/>
+      <stop offset="0.5" stop-color="#E76F00"/>
+      <stop offset="1" stop-color="#B25300"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="#F8F9FA"/>
+  <rect width="800" height="600" fill="url(#gridgv)"/>
+
+  <path d="M60 390H740" stroke="#8A9BB0" stroke-width="1.2" stroke-dasharray="14 6 3 6" fill="none"/>
+  <path d="M400 96v320" stroke="#8A9BB0" stroke-width="1.2" stroke-dasharray="14 6 3 6" fill="none"/>
+
+  <g stroke="#4A3418" stroke-width="2.5" stroke-linejoin="round">
+    <!-- inlet / outlet screwed ends -->
+    <rect x="120" y="356" width="104" height="68" rx="4" fill="url(#bronzegv)"/>
+    <rect x="576" y="356" width="104" height="68" rx="4" fill="url(#bronzegv)"/>
+    <!-- hex collars -->
+    <path d="M224 342h56l14 16v64l-14 16h-56z" fill="url(#bronzegv)"/>
+    <path d="M576 342h-56l-14 16v64l14 16h56z" fill="url(#bronzegv)"/>
+
+    <!-- globe body -->
+    <path d="M294 336h212v52a106 46 0 0 1 -212 0z" fill="url(#bronzegv)"/>
+    <ellipse cx="400" cy="336" rx="106" ry="40" fill="url(#bronzegv)"/>
+
+    <!-- union bonnet -->
+    <rect x="336" y="266" width="128" height="44" rx="8" fill="url(#bronzegvDark)"/>
+    <path d="M348 266v-40h104v40z" fill="url(#bronzegv)"/>
+    <rect x="326" y="300" width="148" height="24" rx="8" fill="url(#bronzegvDark)"/>
+
+    <!-- gland nut + stem -->
+    <rect x="366" y="196" width="68" height="34" rx="6" fill="url(#bronzegv)"/>
+    <rect x="388" y="112" width="24" height="86" rx="4" fill="url(#bronzegv)"/>
+  </g>
+
+  <!-- stem thread hatching -->
+  <g stroke="#4A3418" stroke-width="1.4" opacity="0.55">
+    <path d="M388 126h24M388 140h24M388 154h24M388 168h24M388 182h24"/>
+  </g>
+
+  <!-- hand wheel -->
+  <g stroke="#8C4100" stroke-width="2.5" fill="none">
+    <ellipse cx="400" cy="112" rx="132" ry="26" fill="url(#wheelgv)"/>
+    <ellipse cx="400" cy="112" rx="132" ry="26" fill="none"/>
+    <ellipse cx="400" cy="112" rx="94" ry="17" fill="#F8F9FA"/>
+    <path d="M306 112h188" stroke-width="2"/>
+  </g>
+  <circle cx="400" cy="112" r="16" fill="#0D1B2A" stroke="#0D1B2A" stroke-width="2.5"/>
+
+  <!-- thread hatching on ends -->
+  <g stroke="#4A3418" stroke-width="1.4" opacity="0.5">
+    <path d="M130 356v68M144 356v68M158 356v68M172 356v68M186 356v68M200 356v68"/>
+    <path d="M600 356v68M614 356v68M628 356v68M642 356v68M656 356v68M670 356v68"/>
+  </g>
+
+  <!-- flow arrows -->
+  <g stroke="#E76F00" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M74 390h34"/>
+    <path d="M96 380l14 10 -14 10"/>
+    <path d="M692 390h34"/>
+    <path d="M714 380l14 10 -14 10"/>
+  </g>
+
+  <text x="400" y="510" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19" fill="#0D1B2A" letter-spacing="2">UNION BONNET · RENEWABLE SEAT</text>
+  <text x="400" y="540" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#8A9BB0" letter-spacing="3">GUN METAL IS:318 LTB2 · 15–150 mm</text>
+</svg>

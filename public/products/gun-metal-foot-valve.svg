@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Gun metal foot valve with integral strainer, technical elevation">
+  <defs>
+    <pattern id="gridfv" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#0D1B2A" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="bronzefv" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F0D9B5"/>
+      <stop offset="0.3" stop-color="#D6AE7B"/>
+      <stop offset="0.65" stop-color="#B08249"/>
+      <stop offset="1" stop-color="#7E5A2E"/>
+    </linearGradient>
+    <linearGradient id="bronzefvDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C79A61"/>
+      <stop offset="1" stop-color="#6E4E28"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="#F8F9FA"/>
+  <rect width="800" height="600" fill="url(#gridfv)"/>
+
+  <path d="M400 60v480" stroke="#8A9BB0" stroke-width="1.2" stroke-dasharray="14 6 3 6" fill="none"/>
+
+  <g stroke="#4A3418" stroke-width="2.5" stroke-linejoin="round">
+    <!-- top screwed outlet -->
+    <rect x="352" y="104" width="96" height="70" rx="4" fill="url(#bronzefv)"/>
+    <!-- hex collar -->
+    <path d="M340 174h120l14 18v34l-14 18H340l-14 -18v-34z" fill="url(#bronzefv)"/>
+    <!-- valve chamber -->
+    <path d="M326 244h148a26 26 0 0 1 26 26v42a26 26 0 0 1 -26 26H326a26 26 0 0 1 -26 -26v-42a26 26 0 0 1 26 -26z" fill="url(#bronzefv)"/>
+    <!-- seat ring -->
+    <rect x="296" y="336" width="208" height="26" rx="8" fill="url(#bronzefvDark)"/>
+    <!-- strainer skirt -->
+    <path d="M296 362h208l30 128a10 10 0 0 1 -10 12H276a10 10 0 0 1 -10 -12z" fill="url(#bronzefv)"/>
+    <!-- bottom rim -->
+    <rect x="262" y="490" width="276" height="22" rx="10" fill="url(#bronzefvDark)"/>
+  </g>
+
+  <!-- thread hatching on outlet -->
+  <g stroke="#4A3418" stroke-width="1.4" opacity="0.5">
+    <path d="M352 116h96M352 130h96M352 144h96M352 158h96"/>
+  </g>
+
+  <!-- hinged disc -->
+  <g stroke="#4A3418" stroke-width="2.5" fill="#EFE2CD">
+    <path d="M318 300h164v18H318z"/>
+    <circle cx="318" cy="309" r="8" fill="#8E6A38"/>
+  </g>
+  <path d="M330 296l52 -34" stroke="#E76F00" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M382 262l-14 4 6 12z" fill="#E76F00"/>
+
+  <!-- strainer perforations -->
+  <g fill="#F8F9FA" stroke="#4A3418" stroke-width="1.6">
+    <circle cx="322" cy="396" r="9"/><circle cx="362" cy="396" r="9"/><circle cx="402" cy="396" r="9"/><circle cx="442" cy="396" r="9"/><circle cx="482" cy="396" r="9"/>
+    <circle cx="318" cy="434" r="9"/><circle cx="360" cy="434" r="9"/><circle cx="402" cy="434" r="9"/><circle cx="444" cy="434" r="9"/><circle cx="486" cy="434" r="9"/>
+    <circle cx="312" cy="472" r="9"/><circle cx="357" cy="472" r="9"/><circle cx="402" cy="472" r="9"/><circle cx="447" cy="472" r="9"/><circle cx="492" cy="472" r="9"/>
+  </g>
+
+  <!-- flow arrows -->
+  <g stroke="#E76F00" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M180 470v-160"/>
+    <path d="M170 322l10 -14 10 14"/>
+    <path d="M620 470v-160"/>
+    <path d="M610 322l10 -14 10 14"/>
+  </g>
+  <text x="180" y="500" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#E76F00" letter-spacing="2">FLOW</text>
+  <text x="620" y="500" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#E76F00" letter-spacing="2">FLOW</text>
+
+  <text x="400" y="552" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="17" fill="#0D1B2A" letter-spacing="2">GUN METAL IS:318 LTB2 · 15–150 mm</text>
+</svg>

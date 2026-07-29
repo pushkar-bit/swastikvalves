@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Three piece flanged ball valve, technical elevation">
+  <defs>
+    <pattern id="grid3p" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#0D1B2A" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="steel3p" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4F6F8"/>
+      <stop offset="0.35" stop-color="#D6DCE4"/>
+      <stop offset="0.62" stop-color="#AEB9C7"/>
+      <stop offset="1" stop-color="#8A9BB0"/>
+    </linearGradient>
+    <linearGradient id="body3p" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FAFBFC"/>
+      <stop offset="0.3" stop-color="#DEE4EB"/>
+      <stop offset="0.7" stop-color="#B4C0CE"/>
+      <stop offset="1" stop-color="#7C8DA3"/>
+    </linearGradient>
+    <linearGradient id="lever3p" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF9433"/>
+      <stop offset="0.5" stop-color="#E76F00"/>
+      <stop offset="1" stop-color="#B25300"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="#F8F9FA"/>
+  <rect width="800" height="600" fill="url(#grid3p)"/>
+
+  <g stroke="#0D1B2A" stroke-width="2.5" stroke-linejoin="round">
+    <!-- centre line -->
+    <path d="M60 340H740" stroke="#8A9BB0" stroke-width="1.2" stroke-dasharray="14 6 3 6" fill="none"/>
+
+    <!-- left flange -->
+    <rect x="96" y="264" width="30" height="152" rx="5" fill="url(#steel3p)"/>
+    <!-- left end cap -->
+    <path d="M126 288h58l22 -12v128l-22 -12h-58z" fill="url(#steel3p)"/>
+    <rect x="206" y="290" width="104" height="100" rx="6" fill="url(#steel3p)"/>
+
+    <!-- right end cap mirrored -->
+    <rect x="674" y="264" width="30" height="152" rx="5" fill="url(#steel3p)"/>
+    <path d="M674 288h-58l-22 -12v128l22 -12h58z" fill="url(#steel3p)"/>
+    <rect x="490" y="290" width="104" height="100" rx="6" fill="url(#steel3p)"/>
+
+    <!-- centre body -->
+    <rect x="298" y="262" width="204" height="156" rx="14" fill="url(#body3p)"/>
+    <!-- bonnet / stem boss -->
+    <path d="M356 262v-26h88v26z" fill="url(#steel3p)"/>
+    <rect x="366" y="196" width="68" height="42" rx="6" fill="url(#steel3p)"/>
+    <rect x="386" y="150" width="28" height="48" rx="4" fill="url(#steel3p)"/>
+
+    <!-- lever handle -->
+    <path d="M330 122h248a12 12 0 0 1 12 12v22a12 12 0 0 1 -12 12H330a14 14 0 0 1 -14 -14v-18a14 14 0 0 1 14 -14z" fill="url(#lever3p)" stroke="#8C4100"/>
+    <rect x="318" y="128" width="56" height="30" rx="8" fill="#0D1B2A" stroke="#0D1B2A"/>
+  </g>
+
+  <!-- ball + bore, shown as a cutaway hint -->
+  <g>
+    <circle cx="400" cy="340" r="54" fill="#E9EDF2" stroke="#0D1B2A" stroke-width="2.5"/>
+    <rect x="330" y="322" width="140" height="36" rx="6" fill="#F8F9FA" stroke="#0D1B2A" stroke-width="2.5"/>
+    <circle cx="400" cy="340" r="54" fill="none" stroke="#0D1B2A" stroke-width="2.5"/>
+    <path d="M400 286v-136" stroke="#0D1B2A" stroke-width="2.5"/>
+  </g>
+
+  <!-- tie bolts -->
+  <g fill="#0D1B2A">
+    <circle cx="316" cy="286" r="6"/>
+    <circle cx="316" cy="394" r="6"/>
+    <circle cx="484" cy="286" r="6"/>
+    <circle cx="484" cy="394" r="6"/>
+  </g>
+
+  <!-- flange bolt holes -->
+  <g fill="#0D1B2A" opacity="0.75">
+    <circle cx="111" cy="286" r="5"/><circle cx="111" cy="340" r="5"/><circle cx="111" cy="394" r="5"/>
+    <circle cx="689" cy="286" r="5"/><circle cx="689" cy="340" r="5"/><circle cx="689" cy="394" r="5"/>
+  </g>
+
+  <!-- dimension callout -->
+  <g stroke="#E76F00" stroke-width="1.5" fill="none">
+    <path d="M96 470h608"/>
+    <path d="M96 460v20M704 460v20"/>
+  </g>
+  <text x="400" y="500" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19" fill="#0D1B2A" letter-spacing="2">FACE TO FACE</text>
+  <text x="400" y="530" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#8A9BB0" letter-spacing="3">CLASS 800 · 15–50 mm</text>
+</svg>

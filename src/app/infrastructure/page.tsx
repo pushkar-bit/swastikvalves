@@ -1,7 +1,22 @@
 import { Metadata } from "next";
+import { Instrument_Serif, Barlow } from "next/font/google";
 import Link from "next/link";
 import MachineList from "@/components/common/MachineList";
 import PhotoGallery from "@/components/common/PhotoGallery";
+import InfrastructureShowcase from "@/components/infrastructure/InfrastructureShowcase";
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["italic", "normal"],
+  variable: "--font-showcase-heading",
+});
+
+const barlow = Barlow({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-showcase-body",
+});
 
 export const metadata: Metadata = {
   title: "Manufacturing Facilities | Swastik Valves Ludhiana, Punjab",
@@ -12,25 +27,10 @@ export const metadata: Metadata = {
 export default function InfrastructurePage() {
   return (
     <div className="bg-white">
-      {/* Page Hero */}
-      <section className="bg-brand-charcoal text-white py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8a9bb004_1px,transparent_1px),linear-gradient(to_bottom,#8a9bb004_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <nav className="text-brand-steel text-sm mb-4 font-semibold uppercase tracking-wider">
-            <Link href="/" className="hover:text-brand-orange transition-colors">
-              Home
-            </Link>{" "}
-            <span className="mx-2">›</span> <span className="text-white">Infrastructure</span>
-          </nav>
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-none text-white">
-            Manufacturing Facilities & Infrastructure
-          </h1>
-          <div className="w-20 h-1 bg-brand-orange rounded mt-4 mb-4" />
-          <p className="text-brand-steel text-lg sm:text-xl font-medium max-w-2xl leading-relaxed">
-            Modern machinery. Experienced teams. Precision at every stage.
-          </p>
-        </div>
-      </section>
+      <InfrastructureShowcase
+        headingClass={`${instrumentSerif.className} font-heading`}
+        bodyClass={`${barlow.className} font-body`}
+      />
 
       {/* Intro Text Section */}
       <section className="py-20 bg-white">
@@ -61,7 +61,7 @@ export default function InfrastructurePage() {
       </section>
 
       {/* Machinery List Section */}
-      <section className="py-20 bg-brand-offwhite border-t border-b border-brand-steel/10">
+      <section id="gallery" className="py-20 bg-brand-offwhite border-t border-b border-brand-steel/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <MachineList />
         </div>
@@ -73,6 +73,15 @@ export default function InfrastructurePage() {
           <PhotoGallery />
         </div>
       </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 text-center">
+        <Link
+          href="/"
+          className="text-brand-steel hover:text-brand-orange text-xs font-semibold uppercase tracking-wider"
+        >
+          ← Back to Home
+        </Link>
+      </div>
     </div>
   );
 }

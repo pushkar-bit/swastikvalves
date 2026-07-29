@@ -4,15 +4,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Phone } from "lucide-react";
+import { Menu, X, ChevronDown, Phone, ShoppingCart } from "lucide-react";
 import { COMPANY, PRODUCTS } from "@/lib/constants";
 import { RedesignedLogo } from "@/components/layout/logo";
+import { useCart } from "@/lib/cart";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pathname = usePathname();
+  const { itemCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -132,6 +134,18 @@ export default function Navbar() {
               <span className="text-sm font-bold">{COMPANY.phone}</span>
             </a>
             <Link
+              href="/cart"
+              aria-label="View cart"
+              className="relative flex items-center justify-center w-11 h-11 rounded-md text-white hover:text-brand-orange hover:bg-brand-charcoal transition-colors"
+            >
+              <ShoppingCart className="w-5 h-5" />
+              {itemCount > 0 && (
+                <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-brand-orange text-white text-[10px] font-bold leading-none">
+                  {itemCount > 99 ? "99+" : itemCount}
+                </span>
+              )}
+            </Link>
+            <Link
               href="/enquiry"
               className="bg-brand-orange text-white hover:bg-orange-600 transition-colors px-5 py-2.5 rounded-md font-bold text-sm tracking-wide shadow-md hover:shadow-lg"
             >
@@ -140,7 +154,19 @@ export default function Navbar() {
           </div>
 
           {/* Mobile hamburger menu button */}
-          <div className="lg:hidden flex items-center">
+          <div className="lg:hidden flex items-center gap-1">
+            <Link
+              href="/cart"
+              aria-label="View cart"
+              className="relative flex items-center justify-center w-11 h-11 rounded-md text-white hover:text-brand-orange hover:bg-brand-charcoal transition-colors"
+            >
+              <ShoppingCart className="w-5 h-5" />
+              {itemCount > 0 && (
+                <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-brand-orange text-white text-[10px] font-bold leading-none">
+                  {itemCount > 99 ? "99+" : itemCount}
+                </span>
+              )}
+            </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-brand-orange hover:bg-brand-charcoal focus:outline-none"

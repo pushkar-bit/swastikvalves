@@ -1,10 +1,13 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Layers } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import ProductHero from "@/components/product/ProductHero";
 import KeyFeatures from "@/components/product/KeyFeatures";
 import SpecsTable from "@/components/product/SpecsTable";
 import ProductCTA from "@/components/product/ProductCTA";
+import AddToCartPanel from "@/components/product/AddToCartPanel";
+import { findFamily } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Gun Metal Valves Manufacturer India | Swastik Valves Punjab",
@@ -102,17 +105,18 @@ export default function GunMetalValvesPage() {
               </div>
             </div>
 
-            {/* Right Product Mock */}
-            <div className="lg:col-span-5 pt-4">
-              <div className="h-72 sm:h-96 rounded-2xl bg-gradient-to-br from-brand-steel/10 to-brand-navy/95 border border-brand-steel/20 flex flex-col items-center justify-center p-8 text-center text-white relative overflow-hidden shadow-lg">
-                <Layers className="w-24 h-24 text-brand-orange animate-[pulse-slow_3s_ease-in-out_infinite]" />
-                <span className="text-brand-orange font-black text-lg mt-6">
-                  {name}
-                </span>
-                <span className="text-brand-steel text-xs font-bold mt-2">
-                  Corrosion Resistant & High Tensile Strength
-                </span>
+            {/* Right Product Image + Buy Box */}
+            <div className="lg:col-span-5 pt-4 space-y-6">
+              <div className="h-72 sm:h-80 rounded-2xl bg-white border border-brand-steel/20 flex items-center justify-center p-4 shadow-lg overflow-hidden">
+                <Image
+                  src={findFamily("gun-metal-valves")?.image || ""}
+                  alt={findFamily("gun-metal-valves")?.imageAlt || name}
+                  width={640}
+                  height={480}
+                  className="w-full h-full object-contain"
+                />
               </div>
+              <AddToCartPanel familySlug="gun-metal-valves" />
             </div>
 
           </div>
