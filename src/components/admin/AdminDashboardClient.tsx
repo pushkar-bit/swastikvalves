@@ -13,6 +13,7 @@ import {
   XCircle,
   IndianRupee,
   Loader2,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
 import { RFQRecord } from "@/lib/sheets";
@@ -239,12 +240,13 @@ export default function AdminDashboardClient({ adminEmail, initialOrders }: Prop
                   <th className="p-3">Purchase / Payment</th>
                   <th className="p-3">Status</th>
                   <th className="p-3">Advance</th>
+                  {tab === "bills" && <th className="p-3">Bill</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 text-xs">
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={9} className="p-8 text-center text-brand-steel font-semibold">
+                    <td colSpan={tab === "bills" ? 10 : 9} className="p-8 text-center text-brand-steel font-semibold">
                       No orders match this view yet.
                     </td>
                   </tr>
@@ -331,6 +333,19 @@ export default function AdminDashboardClient({ adminEmail, initialOrders }: Prop
                         <span className="text-brand-steel text-[10px] font-bold">Not Applicable</span>
                       )}
                     </td>
+                    {tab === "bills" && (
+                      <td className="p-3">
+                        <a
+                          href={`/api/admin/orders/${order.orderId}/bill`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 bg-brand-orange hover:bg-orange-600 text-white px-2.5 py-1.5 rounded-md text-[10px] font-bold transition-colors whitespace-nowrap"
+                        >
+                          <Download className="w-3 h-3" />
+                          PDF
+                        </a>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
