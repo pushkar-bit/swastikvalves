@@ -23,13 +23,13 @@ interface SendMailArgs {
  * local development still shows what would have gone out, without failing the
  * request that triggered it.
  */
-export async function sendMail({ to, subject, html, replyTo }: SendMailArgs) {
+export async function sendMail({ to, subject, html, replyTo }: SendMailArgs): Promise<void> {
   if (!isMailConfigured()) {
     console.warn(`[email] SMTP not configured — would have sent "${subject}" to ${to}`);
-    return null;
+    return;
   }
 
-  return transporter.sendMail({
+  await transporter.sendMail({
     from: getMailFrom(),
     to,
     subject,
