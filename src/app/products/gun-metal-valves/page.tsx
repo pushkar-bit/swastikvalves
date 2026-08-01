@@ -7,7 +7,9 @@ import KeyFeatures from "@/components/product/KeyFeatures";
 import SpecsTable from "@/components/product/SpecsTable";
 import ProductCTA from "@/components/product/ProductCTA";
 import AddToCartPanel from "@/components/product/AddToCartPanel";
-import { findFamily } from "@/lib/catalog";
+import { getProductFamily } from "@/lib/productStore";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Gun Metal Valves Manufacturer India | Swastik Valves Punjab",
@@ -15,7 +17,8 @@ export const metadata: Metadata = {
     "Swastik Valves manufactures Gun Metal Valves — ISO standard, dimensionally accurate, corrosion resistant. Suppliers and exporters in India, Punjab, Ludhiana.",
 };
 
-export default function GunMetalValvesPage() {
+export default async function GunMetalValvesPage() {
+  const family = await getProductFamily("gun-metal-valves");
   const name = "Gun Metal Valves";
   const tagline = "Industrial Grade Gun Metal Valves — Corrosion Resistant, High Tensile Strength";
 
@@ -109,14 +112,14 @@ export default function GunMetalValvesPage() {
             <div className="lg:col-span-5 pt-4 space-y-6">
               <div className="h-72 sm:h-80 rounded-2xl bg-white border border-brand-steel/20 flex items-center justify-center p-4 shadow-lg overflow-hidden">
                 <Image
-                  src={findFamily("gun-metal-valves")?.image || ""}
-                  alt={findFamily("gun-metal-valves")?.imageAlt || name}
+                  src={family?.image || ""}
+                  alt={family?.imageAlt || name}
                   width={640}
                   height={480}
                   className="w-full h-full object-contain"
                 />
               </div>
-              <AddToCartPanel familySlug="gun-metal-valves" />
+              {family && <AddToCartPanel family={family} />}
             </div>
 
           </div>

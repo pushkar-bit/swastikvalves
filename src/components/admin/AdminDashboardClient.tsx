@@ -147,6 +147,13 @@ export default function AdminDashboardClient({ adminEmail, initialOrders }: Prop
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/admin/products"
+              className="inline-flex items-center gap-2 text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 px-3.5 py-2 rounded-lg transition-colors"
+            >
+              <Package className="w-3.5 h-3.5" />
+              Products
+            </Link>
             <button
               onClick={refresh}
               disabled={refreshing}

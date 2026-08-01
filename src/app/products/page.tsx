@@ -3,8 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Wrench } from "lucide-react";
 import { PRODUCTS } from "@/lib/constants";
-import { findFamily } from "@/lib/catalog";
+import { getProductFamilies } from "@/lib/productStore";
 import SectionHeader from "@/components/common/SectionHeader";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Products | Ball Valves & Gun Metal Valves — Swastik Valves India",
@@ -12,7 +14,10 @@ export const metadata: Metadata = {
     "Explore our precision-engineered industrial valves range including 3 Piece Ball Valves, Three Piece Ball Valves, Gun Metal Foot Valves, and Gun Metal Valves.",
 };
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const families = await getProductFamilies();
+  const familyMap = new Map(families.map((f) => [f.id, f]));
+
   return (
     <div className="bg-white">
       {/* Page Hero */}
@@ -54,8 +59,8 @@ export default function ProductsPage() {
                 {/* Top Half - Product Image */}
                 <div className="h-44 bg-white relative flex items-center justify-center border-b border-gray-100 overflow-hidden p-4">
                   <Image
-                    src={findFamily(prod.id)?.image || ""}
-                    alt={findFamily(prod.id)?.imageAlt || prod.name}
+                    src={familyMap.get(prod.id)?.image || ""}
+                    alt={familyMap.get(prod.id)?.imageAlt || prod.name}
                     width={400}
                     height={300}
                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"

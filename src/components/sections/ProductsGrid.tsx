@@ -5,9 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import SectionHeader from "@/components/common/SectionHeader";
 import { PRODUCTS } from "@/lib/constants";
-import { findFamily } from "@/lib/catalog";
+import type { ProductFamily } from "@/lib/catalog";
 
-export default function ProductsGrid() {
+interface ProductsGridProps {
+  families: ProductFamily[];
+}
+
+export default function ProductsGrid({ families }: ProductsGridProps) {
+  const familyMap = new Map(families.map((f) => [f.id, f]));
   const containerVariants = {
     hidden: {},
     show: {
@@ -51,8 +56,8 @@ export default function ProductsGrid() {
                 {/* Top Section / Product Image */}
                 <div className="h-48 bg-white relative flex items-center justify-center border-b border-brand-steel/10 group p-4 overflow-hidden">
                   <Image
-                    src={findFamily(product.id)?.image || ""}
-                    alt={findFamily(product.id)?.imageAlt || product.name}
+                    src={familyMap.get(product.id)?.image || ""}
+                    alt={familyMap.get(product.id)?.imageAlt || product.name}
                     width={400}
                     height={300}
                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"

@@ -126,6 +126,277 @@ const fallbackDbPath =
   process.env.LOCAL_DB_PATH || path.join(process.cwd(), "scratch", "db.json");
 
 /* ------------------------------------------------------------------ *
+ * Product catalog — one row per variant (size + material), grouped by
+ * familyId when read back. Lets admins add/edit/remove sizes, grades and
+ * indicative rates from the admin portal without touching code.
+ * ------------------------------------------------------------------ */
+
+export interface ProductVariantRow {
+  sku: string;
+  size: string;
+  bore: number;
+  material: string;
+  materialCode: string;
+  indicativeRate: number;
+}
+
+export interface ProductFamilyData {
+  familyId: string;
+  name: string;
+  slug: string;
+  detailHref: string;
+  image: string;
+  imageAlt: string;
+  tagline: string;
+  description: string;
+  pressureClass: string;
+  endConnection: string;
+  standards: string[];
+  applications: string[];
+  highlights: string[];
+  variants: ProductVariantRow[];
+}
+
+const PRODUCTS_SHEET = "Products";
+const PRODUCTS_RANGE = `${PRODUCTS_SHEET}!A:S`;
+
+export const PRODUCT_HEADERS = [
+  "Family ID",
+  "Family Name",
+  "Slug",
+  "Detail Href",
+  "Image",
+  "Image Alt",
+  "Tagline",
+  "Description",
+  "Pressure Class",
+  "End Connection",
+  "Standards",
+  "Applications",
+  "Highlights",
+  "SKU",
+  "Size",
+  "Bore (mm)",
+  "Material",
+  "Material Code",
+  "Indicative Rate (INR)",
+] as const;
+
+const PCOL = {
+  familyId: 0,
+  familyName: 1,
+  slug: 2,
+  detailHref: 3,
+  image: 4,
+  imageAlt: 5,
+  tagline: 6,
+  description: 7,
+  pressureClass: 8,
+  endConnection: 9,
+  standards: 10,
+  applications: 11,
+  highlights: 12,
+  sku: 13,
+  size: 14,
+  bore: 15,
+  material: 16,
+  materialCode: 17,
+  indicativeRate: 18,
+} as const;
+
+function productRowsToFamilies(rows: string[][]): ProductFamilyData[] {
+  const byFamily = new Map<string, ProductFamilyData>();
+
+  for (const row of rows) {
+    const familyId = row[PCOL.familyId];
+    if (!familyId) continue;
+
+    if (!byFamily.has(familyId)) {
+      byFamily.set(familyId, {
+        familyId,
+        name: row[PCOL.familyName] || "",
+        slug: row[PCOL.slug] || "",
+        detailHref: row[PCOL.detailHref] || "",
+        image: row[PCOL.image] || "",
+        imageAlt: row[PCOL.imageAlt] || "",
+        tagline: row[PCOL.tagline] || "",
+        description: row[PCOL.description] || "",
+        pressureClass: row[PCOL.pressureClass] || "",
+        endConnection: row[PCOL.endConnection] || "",
+        standards: (row[PCOL.standards] || "").split("|").map((s) => s.trim()).filter(Boolean),
+        applications: (row[PCOL.applications] || "").split("|").map((s) => s.trim()).filter(Boolean),
+        highlights: (row[PCOL.highlights] || "").split("|").map((s) => s.trim()).filter(Boolean),
+        variants: [],
+      });
+    }
+
+    const sku = row[PCOL.sku];
+    if (sku) {
+      byFamily.get(familyId)!.variants.push({
+        sku,
+        size: row[PCOL.size] || "",
+        bore: Number(row[PCOL.bore]) || 0,
+        material: row[PCOL.material] || "",
+        materialCode: row[PCOL.materialCode] || "",
+        indicativeRate: Number(row[PCOL.indicativeRate]) || 0,
+      });
+    }
+  }
+
+  return Array.from(byFamily.values());
+}
+
+function familyToRows(family: ProductFamilyData): (string | number)[][] {
+  const shared = [
+    family.familyId,
+    family.name,
+    family.slug,
+    family.detailHref,
+    family.image,
+    family.imageAlt,
+    family.tagline,
+    family.description,
+    family.pressureClass,
+    family.endConnection,
+    family.standards.join(" | "),
+    family.applications.join(" | "),
+    family.highlights.join(" | "),
+  ];
+
+  if (family.variants.length === 0) {
+    return [[...shared, "", "", "", "", "", ""]];
+  }
+
+  return family.variants.map((v) => [
+    ...shared,
+    v.sku,
+    v.size,
+    v.bore,
+    v.material,
+    v.materialCode,
+    v.indicativeRate,
+  ]);
+}
+
+/** Full catalog, grouped by family. Returns null when Sheets isn't configured/reachable — caller falls back to the static seed. */
+export async function listProductFamilies(): Promise<ProductFamilyData[] | null> {
+  const client = await getSheetsClient();
+  if (!client) return null;
+
+  try {
+    await ensureSheet(client, PRODUCTS_SHEET, [...PRODUCT_HEADERS]);
+    const res = await client.sheets.spreadsheets.values.get({
+      spreadsheetId: client.spreadsheetId,
+      range: PRODUCTS_RANGE,
+    });
+    const rows = (res.data.values || []).slice(1) as string[][];
+    const families = productRowsToFamilies(rows);
+    return families.length > 0 ? families : null;
+  } catch (error) {
+    console.error("Google Sheets product list failed:", error);
+    return null;
+  }
+}
+
+/** Replaces every row belonging to this family with the ones derived from `family.variants`. */
+export async function saveProductFamily(family: ProductFamilyData): Promise<boolean> {
+  const client = await getSheetsClient();
+  if (!client) return false;
+
+  try {
+    await ensureSheet(client, PRODUCTS_SHEET, [...PRODUCT_HEADERS]);
+    const res = await client.sheets.spreadsheets.values.get({
+      spreadsheetId: client.spreadsheetId,
+      range: PRODUCTS_RANGE,
+    });
+    const rows = (res.data.values || []) as string[][];
+    const keptRows = rows.slice(1).filter((row) => row[PCOL.familyId] !== family.familyId);
+    const newValues = [[...PRODUCT_HEADERS], ...keptRows, ...familyToRows(family)];
+
+    await client.sheets.spreadsheets.values.clear({
+      spreadsheetId: client.spreadsheetId,
+      range: PRODUCTS_RANGE,
+    });
+    await client.sheets.spreadsheets.values.update({
+      spreadsheetId: client.spreadsheetId,
+      range: `${PRODUCTS_SHEET}!A1`,
+      valueInputOption: "RAW",
+      requestBody: { values: newValues },
+    });
+    return true;
+  } catch (error) {
+    console.error("Google Sheets product save failed:", error);
+    return false;
+  }
+}
+
+/** Removes a single variant row by SKU. If it was the family's last variant, the family itself disappears too. */
+export async function deleteProductVariant(sku: string): Promise<boolean> {
+  const client = await getSheetsClient();
+  if (!client) return false;
+
+  try {
+    const res = await client.sheets.spreadsheets.values.get({
+      spreadsheetId: client.spreadsheetId,
+      range: PRODUCTS_RANGE,
+    });
+    const rows = (res.data.values || []) as string[][];
+    const newValues = [
+      [...PRODUCT_HEADERS],
+      ...rows.slice(1).filter((row) => row[PCOL.sku] !== sku),
+    ];
+
+    await client.sheets.spreadsheets.values.clear({
+      spreadsheetId: client.spreadsheetId,
+      range: PRODUCTS_RANGE,
+    });
+    await client.sheets.spreadsheets.values.update({
+      spreadsheetId: client.spreadsheetId,
+      range: `${PRODUCTS_SHEET}!A1`,
+      valueInputOption: "RAW",
+      requestBody: { values: newValues },
+    });
+    return true;
+  } catch (error) {
+    console.error("Google Sheets variant delete failed:", error);
+    return false;
+  }
+}
+
+/** Deletes an entire family and all its variant rows. */
+export async function deleteProductFamily(familyId: string): Promise<boolean> {
+  const client = await getSheetsClient();
+  if (!client) return false;
+
+  try {
+    const res = await client.sheets.spreadsheets.values.get({
+      spreadsheetId: client.spreadsheetId,
+      range: PRODUCTS_RANGE,
+    });
+    const rows = (res.data.values || []) as string[][];
+    const newValues = [
+      [...PRODUCT_HEADERS],
+      ...rows.slice(1).filter((row) => row[PCOL.familyId] !== familyId),
+    ];
+
+    await client.sheets.spreadsheets.values.clear({
+      spreadsheetId: client.spreadsheetId,
+      range: PRODUCTS_RANGE,
+    });
+    await client.sheets.spreadsheets.values.update({
+      spreadsheetId: client.spreadsheetId,
+      range: `${PRODUCTS_SHEET}!A1`,
+      valueInputOption: "RAW",
+      requestBody: { values: newValues },
+    });
+    return true;
+  } catch (error) {
+    console.error("Google Sheets family delete failed:", error);
+    return false;
+  }
+}
+
+/* ------------------------------------------------------------------ *
  * Local JSON fallback
  * ------------------------------------------------------------------ */
 
@@ -185,10 +456,23 @@ async function getSheetsClient() {
   }
 }
 
+/** 1-based column index -> spreadsheet letters (1=A, 26=Z, 27=AA, 28=AB, ...). */
+function columnLetters(index: number): string {
+  let n = index;
+  let letters = "";
+  while (n > 0) {
+    const rem = (n - 1) % 26;
+    letters = String.fromCharCode(65 + rem) + letters;
+    n = Math.floor((n - 1) / 26);
+  }
+  return letters;
+}
+
 /** Creates the tab if absent and writes the header row when row 1 is empty. */
 async function ensureSheet(
   client: NonNullable<Awaited<ReturnType<typeof getSheetsClient>>>,
-  title: string
+  title: string,
+  headers: string[] = [...SHEET_HEADERS]
 ) {
   const { sheets, spreadsheetId } = client;
 
@@ -204,17 +488,18 @@ async function ensureSheet(
     });
   }
 
+  const lastCol = columnLetters(headers.length);
   const firstRow = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: `${title}!A1:AB1`,
+    range: `${title}!A1:${lastCol}1`,
   });
 
   if (!firstRow.data.values || firstRow.data.values.length === 0) {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `${title}!A1:AB1`,
+      range: `${title}!A1:${lastCol}1`,
       valueInputOption: "RAW",
-      requestBody: { values: [[...SHEET_HEADERS]] },
+      requestBody: { values: [headers] },
     });
   }
 }

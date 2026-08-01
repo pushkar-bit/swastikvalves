@@ -3,16 +3,15 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Minus, Plus, ShoppingCart, CheckCircle2 } from "lucide-react";
-import { findFamily } from "@/lib/catalog";
+import type { ProductFamily } from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
 import { formatINR } from "@/config/appConfig";
 
 interface AddToCartPanelProps {
-  familySlug: string;
+  family: ProductFamily;
 }
 
-export default function AddToCartPanel({ familySlug }: AddToCartPanelProps) {
-  const family = findFamily(familySlug);
+export default function AddToCartPanel({ family }: AddToCartPanelProps) {
   const { addToCart } = useCart();
 
   const sizes = useMemo(
@@ -34,8 +33,6 @@ export default function AddToCartPanel({ familySlug }: AddToCartPanelProps) {
 
   const [quantity, setQuantity] = useState(50);
   const [justAdded, setJustAdded] = useState(false);
-
-  if (!family) return null;
 
   const handleSizeChange = (size: string) => {
     setSelectedSize(size);

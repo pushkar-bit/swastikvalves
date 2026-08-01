@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { findVariant } from "@/lib/catalog";
+import type { ProductFamily } from "@/lib/catalog";
 
 export interface CartLine {
   sku: string;
@@ -60,12 +60,22 @@ function readStoredCart(): CartLine[] {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [families, setFamilies] = useState<ProductFamily[]>([]);
 
   // Cart lives in localStorage — there's no buyer account, so this is the only
   // place a work-in-progress order persists between visits.
   useEffect(() => {
     setLines(readStoredCart());
     setIsHydrated(true);
+  }, []);
+
+  // Live catalog (Sheets-backed) fetched once per session so cart lines can
+  // resolve price/name without importing the static seed into client code.
+  useEffect(() => {
+    fetch("/api/catalog")
+      .then((res) => res.json())
+      .then((data) => setFamilies(data.families || []))
+      .catch(() => setFamilies([]));
   }, []);
 
   useEffect(() => {
@@ -102,7 +112,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const enrichedLines = useMemo<EnrichedCartLine[]>(() => {
     return lines
       .map((line) => {
-        const hit = findVariant(line.sku);
+        let hit: { family: ProductFamily; variant: ProductFamily["variants"][number] } | null = null;
+        for (const family of families) {
+          const variant = family.variants.find((v) => v.sku === line.sku);
+          if (variant) {
+            hit = { family, variant };
+            break;
+          }
+        }
         if (!hit) return null;
         const rate = hit.variant.indicativeRate;
         return {
@@ -118,7 +135,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         };
       })
       .filter((l): l is EnrichedCartLine => l !== null);
-  }, [lines]);
+  }, [lines, families]);
 
   const itemCount = useMemo(
     () => lines.reduce((sum, l) => sum + l.quantity, 0),

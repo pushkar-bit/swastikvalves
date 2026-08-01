@@ -7,7 +7,9 @@ import KeyFeatures from "@/components/product/KeyFeatures";
 import SpecsTable from "@/components/product/SpecsTable";
 import ProductCTA from "@/components/product/ProductCTA";
 import AddToCartPanel from "@/components/product/AddToCartPanel";
-import { findFamily } from "@/lib/catalog";
+import { getProductFamily } from "@/lib/productStore";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Three Piece Ball Valves Manufacturer Punjab | Swastik Valves India",
@@ -15,7 +17,8 @@ export const metadata: Metadata = {
     "Swastik valves manufactures three piece ball valves, screwed end ball valves in india, punjab — exporters and suppliers of 3 piece ball valves",
 };
 
-export default function ThreePieceBallValvesPage() {
+export default async function ThreePieceBallValvesPage() {
+  const family = await getProductFamily("three-piece-ball-valves");
   const name = "Three Piece Ball Valves";
   const tagline = "Screwed End Precision — Built for Demanding Industrial Environments";
 
@@ -94,14 +97,14 @@ export default function ThreePieceBallValvesPage() {
             <div className="lg:col-span-5 pt-4 space-y-6">
               <div className="h-72 sm:h-80 rounded-2xl bg-white border border-brand-steel/20 flex items-center justify-center p-4 shadow-lg overflow-hidden">
                 <Image
-                  src={findFamily("three-piece-ball-valves")?.image || ""}
-                  alt={findFamily("three-piece-ball-valves")?.imageAlt || name}
+                  src={family?.image || ""}
+                  alt={family?.imageAlt || name}
                   width={640}
                   height={480}
                   className="w-full h-full object-contain"
                 />
               </div>
-              <AddToCartPanel familySlug="three-piece-ball-valves" />
+              {family && <AddToCartPanel family={family} />}
             </div>
 
           </div>

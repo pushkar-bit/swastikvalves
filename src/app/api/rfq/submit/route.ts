@@ -12,7 +12,7 @@ import {
   generateOrderNumber,
   computeAdvancePercentage,
 } from "@/config/appConfig";
-import { describeSku, rateForSku } from "@/lib/catalog";
+import { describeSkuAsync, rateForSkuAsync } from "@/lib/productStore";
 
 function requestOrigin(request: Request): string {
   const host = request.headers.get("host") || "localhost:3000";
@@ -37,12 +37,14 @@ export async function POST(request: Request) {
     const body = await request.json();
     const data = rfqSchema.parse(body);
 
-    const items: RFQItem[] = data.items.map((line) => ({
-      sku: line.sku,
-      partName: describeSku(line.sku),
-      quantity: line.quantity,
-      rate: rateForSku(line.sku, appConfig.pricePerUnit),
-    }));
+    const items: RFQItem[] = await Promise.all(
+      data.items.map(async (line) => ({
+        sku: line.sku,
+        partName: await describeSkuAsync(line.sku),
+        quantity: line.quantity,
+        rate: await rateForSkuAsync(line.sku, appConfig.pricePerUnit),
+      }))
+    );
 
     const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
     const estimatedValue = items.reduce((sum, i) => sum + (i.rate || 0) * i.quantity, 0);
