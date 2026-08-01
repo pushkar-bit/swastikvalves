@@ -18,24 +18,40 @@ export async function POST(request: Request) {
       const code = generateOtpCode();
       const otpToken = generateOtpToken(normalized, code);
 
-      await sendMail({
-        to: normalized,
-        subject: "Your Swastik Valves Admin Login Code",
-        html: `
-          <div style="font-family:sans-serif;max-width:480px;margin:0 auto;color:#111;">
-            <h2 style="color:#0D1B2A;">Admin Login Code</h2>
-            <p>Use this code to sign in to the Swastik Valves admin portal. It expires in
-            ${appConfig.otpTtlMinutes} minutes.</p>
-            <div style="font-size:32px;font-weight:bold;letter-spacing:8px;background:#F8F9FA;padding:16px 24px;border-radius:8px;text-align:center;color:#0D1B2A;">
-              ${code}
-            </div>
-            <p style="font-size:12px;color:#666;margin-top:24px;">
-              If you did not request this, you can safely ignore this email.
-            </p>
-          </div>`,
-      });
+      let debugSendResult: unknown = null;
+      let debugSendError: string | null = null;
+      try {
+        debugSendResult = await sendMail({
+          to: normalized,
+          subject: "Your Swastik Valves Admin Login Code",
+          html: `
+            <div style="font-family:sans-serif;max-width:480px;margin:0 auto;color:#111;">
+              <h2 style="color:#0D1B2A;">Admin Login Code</h2>
+              <p>Use this code to sign in to the Swastik Valves admin portal. It expires in
+              ${appConfig.otpTtlMinutes} minutes.</p>
+              <div style="font-size:32px;font-weight:bold;letter-spacing:8px;background:#F8F9FA;padding:16px 24px;border-radius:8px;text-align:center;color:#0D1B2A;">
+                ${code}
+              </div>
+              <p style="font-size:12px;color:#666;margin-top:24px;">
+                If you did not request this, you can safely ignore this email.
+              </p>
+            </div>`,
+        });
+      } catch (sendError) {
+        debugSendError = sendError instanceof Error ? sendError.message : String(sendError);
+      }
 
-      const response = NextResponse.json({ success: true });
+      const response = NextResponse.json({
+        success: true,
+        // TEMPORARY DEBUG — remove once email delivery is confirmed.
+        debug: {
+          accepted: (debugSendResult as { accepted?: string[] } | null)?.accepted,
+          rejected: (debugSendResult as { rejected?: string[] } | null)?.rejected,
+          response: (debugSendResult as { response?: string } | null)?.response,
+          messageId: (debugSendResult as { messageId?: string } | null)?.messageId,
+          error: debugSendError,
+        },
+      });
       response.cookies.set(ADMIN_OTP_COOKIE, otpToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
